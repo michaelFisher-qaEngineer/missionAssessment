@@ -1,16 +1,33 @@
-package mission;
+package stepDefs;
 
-import cucumber.api.DataTable;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
+import java.util.List;
+import java.util.Map;
 
-public class StepDefinition {
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pageObjects.HomePage;
 
-    @Given("^I am on the home page$")
+public class StepDefinition  {
+
+    @Given("I am on the home page")
     public void iAmOnTheHomePage() {
-        HomePage.homePage();
+        HomePage homePage = new HomePage();
+        homePage.open();
+    }
+    
+    @And("I login in with the following details")
+    public void i_login_in_with_the_following_details(DataTable dataTable) {
+        List<Map<String, String>> credentials = dataTable.asMaps(String.class, String.class);
+        String userName = credentials.get(0).get("userName");
+        String password = credentials.get(0).get("Password");
+        HomePage homePage = new HomePage();
+        homePage.enterUserName(userName);
+        homePage.enterPassword(password);
+        homePage.clickLogin();
+
     }
 
     @Given("^I get the default list of users for on 1st page$")

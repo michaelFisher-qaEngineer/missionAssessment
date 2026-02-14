@@ -1,13 +1,15 @@
-package mission;
+package pageObjects;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
-public class LoadProp extends BasePage {
+import org.openqa.selenium.WebDriver;
 
-    static Properties prop;
+public class LoadProp  {
+
+	static Properties prop;
     static FileInputStream input;
     public static String testData = "/src/test/java/TestData/TestData.properties";
 
