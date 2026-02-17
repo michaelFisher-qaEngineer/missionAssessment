@@ -30,23 +30,18 @@ public class BrowserSetup  {
         browser = LoadProp.getProperty("Browser");
 
         if (browser.equalsIgnoreCase("Chrome")) {
-            //System.setProperty("webdriver.chrome.driver", CHROME_WIN);
             WebDriverManager.chromedriver().setup();
             return new ChromeDriver();
         } else if (browser.equalsIgnoreCase("edge")) {
-            //System.setProperty("webdriver.edge.driver", EDGE);
             WebDriverManager.edgedriver().setup();
             return new EdgeDriver();
         } else if (browser.equalsIgnoreCase("Firefox")) {
             WebDriverManager.firefoxdriver().setup();
-            //System.setProperty("webdriver.gecko.driver", FIREFOX_WIN);
             return new FirefoxDriver();
         } else if (browser.equalsIgnoreCase("chromeMac")) {
-            //System.setProperty("webdriver.chrome.driver", CHROME_MAC);
             WebDriverManager.chromedriver().setup();
             return new ChromeDriver();
         } else if (browser.equalsIgnoreCase("chromeHeadless")) {
-            //System.setProperty("webdriver.chrome.driver", CHROME_MAC);
             ChromeOptions chromeOptions = new ChromeOptions();
             chromeOptions.addArguments("--headless");
             WebDriverManager.chromedriver().setup();

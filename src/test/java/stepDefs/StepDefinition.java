@@ -14,7 +14,7 @@ import pageObjects.CheckoutPage;
 import pageObjects.HomePage;
 import pageObjects.ProductsPage;
 import pageObjects.ShoppingCartPage;
-import utilities.Verifications;
+import static utilities.Verifications.*;
 
 public class StepDefinition {
 
@@ -48,7 +48,7 @@ public class StepDefinition {
 	@And("I should see {int} items added to the shopping cart")
 	public void i_should_see_items_added_to_the_shopping_cart(int expectedCount) {
 		ProductsPage productsPage = new ProductsPage();
-		Verifications.verifyEqualsInt(productsPage.getShoppingCartItemCount(), expectedCount,
+		verifyEqualsInt(productsPage.getShoppingCartItemCount(), expectedCount,
 				"Shopping cart item count");
 
 	}
@@ -63,7 +63,7 @@ public class StepDefinition {
 	public void i_verify_that_the_qty_count_for_each_item_should_be(int expectedQty) {
 		ShoppingCartPage shoppingCartPage = new ShoppingCartPage();
 		List<Integer> quantitiesList = shoppingCartPage.getAllProductQuantities();
-		Verifications.verifyAllIntsEqual(quantitiesList, expectedQty, "Shopping cart item quantity");
+		verifyAllIntsEqual(quantitiesList, expectedQty, "Shopping cart item quantity");
 	}
 
 	@And("I remove the following item:")
@@ -115,7 +115,7 @@ public class StepDefinition {
 			expectedTotal = expectedTotal.add(price);
 		}
 		BigDecimal actualTotal = checkoutOverviewPage.getItemTotal();
-		Verifications.verifyEqualsBigDecimal(actualTotal, expectedTotal, "Checkout overview item total");
+		verifyEqualsBigDecimal(actualTotal, expectedTotal, "Checkout overview item total");
 	}
 	
 	@And("a Tax rate of {int} % is applied to the total")
@@ -124,7 +124,7 @@ public class StepDefinition {
 	    BigDecimal itemTotal = checkoutOverviewPage.getItemTotal();
 	    BigDecimal expectedTax = itemTotal.multiply(BigDecimal.valueOf(taxRate)).divide(BigDecimal.valueOf(100));
 	    BigDecimal actualTax = checkoutOverviewPage.getTaxAmount();
-	    Verifications.verifyEqualsCurrency(actualTax, expectedTax, "Tax calculation");
+	    verifyEqualsCurrency(actualTax, expectedTax, "Tax calculation");
 	}
 	
 //	@Given("I make a search for user (.*)")
@@ -150,27 +150,28 @@ public class StepDefinition {
 //
 //	}
 
-	@Given("I login unsuccessfully with the following data")
-	public void iLoginSuccesfullyWithFollowingData(DataTable dt) {
+//	@Given("I login unsuccessfully with the following data")
+//	public void iLoginSuccesfullyWithFollowingData(DataTable dt) {
+//
+//	}
 
-	}
+//	@Given("^I wait for the user list to load$")
+//	public void iWaitForUserListToLoad() {
+//
+//	}
 
-	@Given("^I wait for the user list to load$")
-	public void iWaitForUserListToLoad() {
+//	@Then("I should see that every user has a unique id")
+//	public void iShouldSeeThatEveryUserHasAUniqueID() {
+//
+//		// Please not that we need to check all values are unique in the list.
+//	}
 
-	}
+//	@Then("^I should get a response code of (\\d+)$")
+//	public void iShouldGetAResponseCodeOf(int responseCode) {
+//		
+//	}
 
-	@Then("I should see that every user has a unique id")
-	public void iShouldSeeThatEveryUserHasAUniqueID() {
-
-		// Please not that we need to check all values are unique in the list.
-	}
-
-	@Then("^I should get a response code of (\\d+)$")
-	public void iShouldGetAResponseCodeOf(int responseCode) {
-	}
-
-	@And("^I should see the following response message:$")
-	public void iShouldSeeTheFollowingResponseMessage() {
-	}
+//	@And("^I should see the following response message:$")
+//	public void iShouldSeeTheFollowingResponseMessage() {
+//	}
 }

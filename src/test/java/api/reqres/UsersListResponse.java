@@ -40,4 +40,5 @@ public class UsersListResponse {
     public List<Integer> getUserIds() {
         return userIds;
     }
+    
 }

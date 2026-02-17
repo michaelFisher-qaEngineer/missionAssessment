@@ -1,18 +1,35 @@
 package api.reqres;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.restassured.response.Response;
+import static io.restassured.RestAssured.given;
+
 
 public class ReqResUsersApi extends BaseClientPage {
 
 	public UsersListResponse getUsersPage(int page) {
-		Response r = request
+		Response r = given()
+				.spec(request)
 				.queryParam("page", page)
+				.log().uri()
 				.when()
 				.get("/api/users")
 				.then()
 				.statusCode(200)
 				.extract()
 				.response();
+		Integer actualPage = r.path("page");
+	    if (actualPage == null) {
+	        throw new RuntimeException("No 'page' field in response: " + r.asString());
+	    }
+	    if (actualPage.intValue() != page) {
+	        throw new AssertionError("Requested page " + page + " but response says page " + actualPage +
+	                ". Full response: " + r.asString());
+	    }
 
 		return UsersListResponse.from(r);
 	}
@@ -98,5 +115,37 @@ public class ReqResUsersApi extends BaseClientPage {
 				.andReturn();
 		return UserPostResponse.from(r);
 	}
+	
+	public LoginResponse userLogin(String email, String password) {
+		Map<String, String> body = new HashMap<String, String>();
+		body.put("email", email);
+		body.put("password", password);
+
+		Response r = request
+				.contentType("application/json; charset=UTF-8")
+				.body(body)
+				.when()
+				.post("/api/login")
+				.andReturn();
+		return LoginResponse.from(r);
+	}
+	
+	public List<Integer> getAllUserIds() {
+
+	    List<Integer> allIds = new ArrayList<Integer>();
+
+	    UsersListResponse firstPage = getUsersPage(1);
+	    allIds.addAll(firstPage.getUserIds());
+
+	    int totalPages = firstPage.getTotalPages();
+
+	    for (int page = 2; page <= totalPages; page++) {
+	        UsersListResponse nextPage = getUsersPage(page);
+	        allIds.addAll(nextPage.getUserIds());
+	    }
+
+	    return allIds;
+	}
+
 	
 }

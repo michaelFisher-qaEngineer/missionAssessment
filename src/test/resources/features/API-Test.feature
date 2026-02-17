@@ -1,3 +1,4 @@
+@API
 Feature: API test
 # Please visit https://reqres.in/
 
@@ -34,7 +35,7 @@ Feature: API test
 
 
   Scenario: LOGIN - SUCCESSFUL by a user
-    Given I login unsuccessfully with the following data
+    Given I login successfully with the following data
       | Email              | Password   |
       | eve.holt@reqres.in | cityslicka |
     Then I should get a response code of 200
@@ -45,7 +46,8 @@ Feature: API test
       | eve.holt@reqres.in |          |
     Then I should get a response code of 400
     And I should see the following response message:
-      | "error": "Missing password" |
+      | field    | value |
+      | error  | Missing password |
 
   Scenario: Should see the list of users with DELAYED RESPONSE
     Given I wait for the user list to load

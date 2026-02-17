@@ -6,15 +6,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import api.reqres.LoginResponse;
 import api.reqres.ReqResUsersApi;
 import api.reqres.UserGetResponse;
 import api.reqres.UserPostResponse;
 import api.reqres.UsersListResponse;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import utilities.Verifications;
+import static utilities.Verifications.*;
 
 public class ApiStepDefs {
 	private final ReqResUsersApi usersApi = new ReqResUsersApi();
@@ -22,9 +24,11 @@ public class ApiStepDefs {
 	private UsersListResponse firstPageResponse;
 	private UsersListResponse numberPageResponse;
 	private int totalUsers;
+	private List<Integer> allUserIds;
 
 	private static UserGetResponse userResponse;
 	private static UserPostResponse userPostResponse;
+	private static LoginResponse loginResponse;
 
 	private final Set<Integer> uniqueUserIds = new HashSet<Integer>();
 
@@ -58,7 +62,7 @@ public class ApiStepDefs {
 	@Then("I should see total users count equals the number of user ids")
 	public void iShouldMatchTotalCount() {
 		int totalUserIdCount = usersApi.getTotalIdCountForAllPages();
-		Verifications.verifyEqualsInt(totalUserIdCount, totalUsers, "Total user ID count should match total users");
+		verifyEqualsInt(totalUserIdCount, totalUsers, "Total user ID count should match total users");
 
 	}
 
@@ -87,16 +91,16 @@ public class ApiStepDefs {
 
 			switch (field.toLowerCase()) {
 			case "id":
-				Verifications.verifyEqualsInt(userResponse.getId(), Integer.parseInt(expectedValue),
+				verifyEqualsInt(userResponse.getId(), Integer.parseInt(expectedValue),
 						"User ID should match");
 				break;
 
 			case "email":
-				Verifications.verifyEqualsString(userResponse.getEmail(), expectedValue, "User email should match");
+				verifyEqualsString(userResponse.getEmail(), expectedValue, "User email should match");
 				break;
 
 			case "first_name":
-				Verifications.verifyEqualsString(userResponse.getFirstName(), expectedValue,
+				verifyEqualsString(userResponse.getFirstName(), expectedValue,
 						"User first name should match");
 				break;
 
@@ -109,7 +113,7 @@ public class ApiStepDefs {
 
 	@Then("I receive error code {int} in response")
 	public void iReceiveErrorCodeInResponse(int responseCode) {
-		Verifications.verifyEqualsInt(userResponse.getStatusCode(), responseCode,
+		verifyEqualsInt(userResponse.getStatusCode(), responseCode,
 				"Response status code should match expected error.");
 	}
 
@@ -120,7 +124,7 @@ public class ApiStepDefs {
 
 	@Then("response should contain the following data")
 	public void responseShouldContainTheFollowingData(DataTable dt) {
-	    List<String> fields = dt.asList(String.class);
+		List<String> fields = dt.asList(String.class);
 
 		if (fields.isEmpty()) {
 			throw new IllegalArgumentException("DataTable is empty");
@@ -130,23 +134,74 @@ public class ApiStepDefs {
 
 			switch (field.toLowerCase()) {
 			case "name":
-				Verifications.verifyNotNullOrEmpty(userPostResponse.getName(), "name should be present in response.");
+				verifyNotNullOrEmpty(userPostResponse.getName(), "name should be present in response.");
 				break;
 			case "id":
 				// Verify that ID is not null/empty for created user
-				Verifications.verifyNotNull(userPostResponse.getId(), "User ID should be generated");
+				verifyNotNull(userPostResponse.getId(), "User ID should be generated");
 				break;
 			case "job":
-				Verifications.verifyNotNullOrEmpty(userPostResponse.getJob(), "job should be present in response.");
+				verifyNotNullOrEmpty(userPostResponse.getJob(), "job should be present in response.");
 				break;
 			case "createdat":
 				// Verify that createdAt timestamp is not null/empty for created user
-				Verifications.verifyNotNull(userPostResponse.getCreatedAt(), "CreatedAt timestamp should be generated");
+				verifyNotNull(userPostResponse.getCreatedAt(), "CreatedAt timestamp should be generated");
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown field: " + field);
 			}
 		}
 	}
+	@Given("I login unsuccessfully with the following data")
+	public void iLoginUnsuccesfullyWithFollowingData(DataTable dt) {
+		iLoginSuccessfullyWithFollowingData(dt);
+	}
 	
+	@Given("I login successfully with the following data")
+	public void iLoginSuccessfullyWithFollowingData(DataTable dt) {
+		List<Map<String, String>> rows = dt.asMaps(String.class, String.class);
+		if (rows.isEmpty()) {
+			throw new IllegalArgumentException("DataTable is empty");
+		}
+		Map<String, String> loginData = rows.get(0);
+		String email = loginData.get("Email");
+		String password = loginData.get("Password");
+		loginResponse = usersApi.userLogin(email, password);
+	}
+
+	@Then("I should get a response code of {int}")
+	public void iShouldGetAResponseCodeOf(int responseCode) {
+		verifyEqualsInt(loginResponse.getStatusCode(), responseCode,
+				"Login response status code should match expected.");
+	}
+	
+	@And("I should see the following response message:")
+	public void iShouldSeeTheFollowingResponseMessage(DataTable dt) {
+	    List<Map<String, String>> rows = dt.asMaps(String.class, String.class);
+	    if (rows.isEmpty()) {
+	        throw new IllegalArgumentException("DataTable is empty");
+	    }
+	    
+	    Map<String, String> expectedMessages = rows.get(0);
+	    String field = expectedMessages.get("field");
+	    String expectedValue = expectedMessages.get("value");
+	    
+	    if ("error".equalsIgnoreCase(field)) {
+	        verifyEqualsString(loginResponse.getErrorMessage(), expectedValue,
+	                "Error message should match expected value");
+	    } else {
+	        throw new IllegalArgumentException("Unsupported field: " + field);
+	    }
+	}
+	
+	@Given("I wait for the user list to load")
+	public void iWaitForUserListToLoad() {
+		allUserIds = usersApi.getAllUserIds();
+	}
+	
+	@Then("I should see that every user has a unique id")
+	public void iShouldSeeThatEveryUserHasAUniqueID() {
+		verifyAllUnique(allUserIds, "User IDs should be unique");
+	}
+
 }
