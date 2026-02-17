@@ -1,6 +1,7 @@
 package pageObjects;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import utilities.LoadProp;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;

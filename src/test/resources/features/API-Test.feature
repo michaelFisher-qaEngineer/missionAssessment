@@ -8,22 +8,25 @@ Feature: API test
 
 
   Scenario: Should see SINGLE USER data
-    Given I make a search for user 3
+    Given I make a search for userId 3
     Then I should see the following user data
       | first_name | email               |
       | Emma       | emma.wong@reqres.in |
 
 
   Scenario: Should see SINGLE USER NOT FOUND error code
-    Given I make a search for user 55
+    Given I make a search for userId 55
     Then I receive error code 404 in response
 
 
   Scenario Outline: CREATE a user
-    Given I create a user with following <Name> <Job>
+    Given I create a user with following "<Name>" "<Job>"
     Then response should contain the following data
-      | name | job | id | createdAt |
-
+      | name |       
+      | job | 
+      |	id | 
+      | createdAt |
+      
     Examples:
       | Name  | Job     |
       | Peter | Manager |

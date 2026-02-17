@@ -3,28 +3,33 @@ package pageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 
-public class BasePage {
-	protected static WebDriver driver;
+import mission.DriverManager;
 
-    public BasePage(WebDriver driver) {
-        BasePage.driver = driver;
-        PageFactory.initElements(driver, this);
+public class BasePage {
+	protected WebDriver driver;
+
+    public BasePage() {
+    	this.driver = DriverManager.getDriver();
+    	if (this.driver == null) {
+            throw new IllegalStateException(
+                "ThreadLocal WebDriver is null. Did you initialize DriverManager.setDriver(...) in your Hooks @Before?"
+            );
+        }
+        PageFactory.initElements(this.driver, this);
+
     }
     
-    public BasePage() {
+    public BasePage(WebDriver driver) {
         // for subclasses that call super() after driver is set
-        if (BasePage.driver == null) {
+        if (driver == null) {
             throw new IllegalStateException("BasePage driver is null. Did you initialize it in Hooks?");
         }
-        PageFactory.initElements(BasePage.driver, this);
+        this.driver = driver;
+        PageFactory.initElements(this.driver, this);
     }
 
-    public static void setDriver(WebDriver driver) {
-        BasePage.driver = driver;
-    }
-
-    public static WebDriver getDriver() {
-        return BasePage.driver;
+    public WebDriver getDriver() {
+        return this.driver;
     }
 
 }

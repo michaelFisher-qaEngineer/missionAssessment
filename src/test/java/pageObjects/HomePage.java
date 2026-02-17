@@ -3,6 +3,8 @@ package pageObjects;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import utilities.LoadProp;
+
 public class HomePage extends BasePage {
 
 	public HomePage() {
@@ -34,4 +36,5 @@ public class HomePage extends BasePage {
 	public void open() {
         driver.get(LoadProp.getProperty("url"));
     }
+	
 }
