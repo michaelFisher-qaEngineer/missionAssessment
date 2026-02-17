@@ -1,4 +1,4 @@
-package pageObjects;
+package driver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import utilities.LoadProp;
@@ -8,7 +8,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.testng.Assert;
 
 import java.text.MessageFormat;
 
@@ -49,7 +48,7 @@ public class BrowserSetup  {
         } else if (browser.equalsIgnoreCase("api")) {
 
         } else {
-            Assert.fail(MessageFormat.format("Wrong Browser: {0}", browser));
+            throw new IllegalStateException(MessageFormat.format("Unsupported browser: {0}. Supported browsers are: Chrome, Edge, Firefox, chromeMac, chromeHeadless, api.", browser));
         }
 		return null;
     }
