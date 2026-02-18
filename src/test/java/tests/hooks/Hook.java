@@ -1,6 +1,8 @@
 package tests.hooks;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -16,11 +18,13 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class Hook {
+	private static final Logger log = LogManager.getLogger(Hook.class);
 
 	private static final int WAIT_SEC = 20;
 
 	@Before("@UI") // no WebDriver for API scenarios
-	public void initializeTest() {
+	public void initializeTest(Scenario scenario) {
+		log.info("Starting UI scenario: {}", scenario.getName());
 		LoadProp.validateRequiredKeys("browser", "url", "screenshotLocation");
 		DriverManager.initDriver();
 		WebDriver driver = DriverManager.getDriver();
@@ -62,11 +66,15 @@ public class Hook {
                         + "_" + browser + ".jpg";
 
                 File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-                FileUtils.copyFile(scrFile, new File(screenshotDir + screenShotFilename));
+                File outFile = new File(screenshotDir + screenShotFilename);
+
+                FileUtils.copyFile(scrFile, outFile);
+                log.info("Saved failure screenshot: {}", outFile.getPath());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.warn("Error during teardown/screenshot capture.", e);
         } finally {
+            log.info("Finished UI scenario: {} (failed={})", scenario.getName(), scenario.isFailed());
             DriverManager.quitDriver();
         }
     }

@@ -22,6 +22,7 @@ public class HomePage extends BasePage {
 	WebElement loginButton;
 	
 	public void enterUserName(String userName) {
+        log.info("Opening entering username: {}", userName);
 		userNameField.sendKeys(userName);
 	}
 	
