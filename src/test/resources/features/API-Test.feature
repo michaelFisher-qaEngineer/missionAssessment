@@ -23,10 +23,11 @@ Feature: API test
   Scenario Outline: CREATE a user
     Given I create a user with following "<Name>" "<Job>"
     Then response should contain the following data
-      | name |       
-      | job | 
-      |	id | 
-      | createdAt |
+	  | field     |
+	  | name      |
+	  | job       |
+	  | id        |
+	  | createdAt |
       
     Examples:
       | Name  | Job     |
@@ -47,7 +48,7 @@ Feature: API test
     Then I should get a response code of 400
     And I should see the following response message:
       | field    | value |
-      | error  | Missing password |
+      | error    | Missing password |
 
   Scenario: Should see the list of users with DELAYED RESPONSE
     Given I wait for the user list to load

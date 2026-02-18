@@ -127,14 +127,18 @@ public class ApiStepDefs {
 
 	@Then("response should contain the following data")
 	public void responseShouldContainTheFollowingData(DataTable dt) {
-		List<String> fields = dt.asList(String.class);
+		List<Map<String,String>> rows = dt.asMaps(String.class, String.class);
 
-		if (fields.isEmpty()) {
+		if (rows.isEmpty()) {
 			throw new IllegalArgumentException("DataTable is empty");
 		}
 
-		for (String field : fields) {
+		for (Map<String, String> row : rows) {
 
+			String field = row.get("field");
+	        if (field == null || field.trim().isEmpty()) {
+	            throw new IllegalArgumentException("Missing 'field' value in DataTable row: " + row);
+	        }
 			switch (field.toLowerCase()) {
 			case "name":
 				verifyNotNullOrEmpty(userPostResponse.getName(), "name should be present in response.");
@@ -155,6 +159,7 @@ public class ApiStepDefs {
 			}
 		}
 	}
+	
 	@Given("I login unsuccessfully with the following data")
 	public void iLoginUnsuccesfullyWithFollowingData(DataTable dt) {
 		iLoginSuccessfullyWithFollowingData(dt);

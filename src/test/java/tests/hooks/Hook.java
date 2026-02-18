@@ -49,7 +49,7 @@ public class Hook {
         try {
             if (driver != null && scenario.isFailed()) {
 
-                String browser = LoadProp.getProperty("Browser");
+                String browser = LoadProp.getProperty("browser");
                 if (browser == null) {
                     browser = "unknownBrowser";
                 }

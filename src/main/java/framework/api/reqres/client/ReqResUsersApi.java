@@ -116,7 +116,8 @@ public class ReqResUsersApi extends BaseApiClient {
 
 	        log.info("GET /api/users?page={}", page);
 
-	        Response pageResponse = request
+	        Response pageResponse = given()
+	        		.spec(request)
 	                .queryParam("page", page)
 	                .when()
 	                .get("/api/users")

@@ -47,7 +47,7 @@ public class DriverManager {
 			webDriver = createEdgeDriver();
 			break;
 		case "chrome":
-		case "chromeMac":
+		case "chromemac":
 		default:
 			webDriver = createChromeDriver();
 			break;

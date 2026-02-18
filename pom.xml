@@ -154,10 +154,7 @@
         <configuration>
           <!-- Common conventions; adjust if your tests use different names -->
           <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Tests.java</include>
-            <include>**/*IT.java</include>
-            <include>**/*Runner.java</include>
+            <include>**/MavenTestRunner.java</include>
           </includes>
 
           <!-- If you use a TestNG suite xml, uncomment and point to it -->
