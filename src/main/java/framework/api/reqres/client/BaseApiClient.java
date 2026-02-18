@@ -13,6 +13,7 @@ public class BaseApiClient {
 
 
     public BaseApiClient() {
+    	LoadProp.validateRequiredKeys("reqresApiKey");
         this.request = buildRequestSpecification();
     }
 

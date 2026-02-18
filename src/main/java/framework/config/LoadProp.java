@@ -44,4 +44,15 @@ public class LoadProp {
 
         return value.trim();
 	}
+    
+    public static void validateRequiredKeys(String... keys) {
+        loadIfNeeded();
+        for (int i = 0; i < keys.length; i++) {
+            String key = keys[i];
+            String val = prop.getProperty(key);
+            if (val == null || val.trim().isEmpty()) {
+                throw new RuntimeException("Missing required property: " + key + " in " + TEST_DATA);
+            }
+        }
+    }
 }

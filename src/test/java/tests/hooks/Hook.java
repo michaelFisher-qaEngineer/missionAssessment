@@ -21,6 +21,7 @@ public class Hook {
 
 	@Before("@UI") // no WebDriver for API scenarios
 	public void initializeTest() {
+		LoadProp.validateRequiredKeys("browser", "url", "screenshotLocation");
 		DriverManager.initDriver();
 		WebDriver driver = DriverManager.getDriver();
 
