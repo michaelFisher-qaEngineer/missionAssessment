@@ -37,14 +37,12 @@ public class CheckoutOverviewPage extends BasePage {
 	
 	public BigDecimal getItemTotal() {
 		String totalText = itemTotal.getText();
-		// "Item total: $29.99" -> "29.99"
 		String cleaned = totalText.replace("Item total: ", "").trim();
 		return parseMoney(cleaned);
 	}
 	
 	public BigDecimal getTaxAmount() {
 		String taxText = taxAmount.getText();
-		// "Tax: $2.40" -> "2.40"
 		String cleaned = taxText.replace("Tax: ", "").trim();
 		return parseMoney(cleaned);
 	}
