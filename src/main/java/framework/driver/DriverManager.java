@@ -12,6 +12,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
 import framework.config.LoadProp;
+import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DriverManager {
     private static final ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
@@ -21,7 +22,7 @@ public class DriverManager {
             // Already initialized for this thread; don't open a 2nd browser.
             return;
         }
-    	String browser = LoadProp.getProperty("Browser");
+    	String browser = LoadProp.getProperty("browser");
     	if (browser == null || browser.trim().isEmpty()) {
     	    browser = "chrome";
     	}
@@ -47,7 +48,7 @@ public class DriverManager {
     
  // ---------- CHROME ----------
     private static WebDriver createChromeDriver() {
-
+    	WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
 
         Map<String, Object> prefs = new HashMap<String, Object>();
@@ -66,7 +67,7 @@ public class DriverManager {
 
     // ---------- FIREFOX ----------
     private static WebDriver createFirefoxDriver() {
-
+    	WebDriverManager.firefoxdriver().setup();
         FirefoxOptions options = new FirefoxOptions();
 
         // Disable password manager prompts
@@ -79,7 +80,7 @@ public class DriverManager {
 
     // ---------- EDGE ----------
     private static WebDriver createEdgeDriver() {
-
+    	WebDriverManager.edgedriver().setup();
         EdgeOptions options = new EdgeOptions();
 
         Map<String, Object> prefs = new HashMap<String, Object>();

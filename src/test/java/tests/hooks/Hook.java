@@ -49,7 +49,7 @@ public class Hook {
                     browser = "unknownBrowser";
                 }
 
-                String screenshotDir = LoadProp.getProperty("ScreenshotLocation");
+                String screenshotDir = LoadProp.getProperty("screenshotLocation");
                 if (screenshotDir == null) {
                     screenshotDir = "target/screenshots/";
                 }

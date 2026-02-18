@@ -7,27 +7,41 @@ import java.util.Properties;
 public class LoadProp {
 
 	private static Properties prop;
-	public static String testData = "testdata/TestData.properties";
+	public static String TEST_DATA = "testdata/TestData.properties";
 	
     private LoadProp() {
         // prevent instantiation
     }
 
+    private static void loadIfNeeded() {
+        if (prop == null) {
+            prop = new Properties();
+
+            try (InputStream inputStream = LoadProp.class
+                    .getClassLoader()
+                    .getResourceAsStream(TEST_DATA)) {
+
+                if (inputStream == null) {
+                    throw new RuntimeException("Could not find " + TEST_DATA + " on classpath");
+                }
+
+                prop.load(inputStream);
+
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to load properties file: " + TEST_DATA, e);
+            }
+        }
+    }
+    
     public static synchronized String getProperty(String key) {
+    	loadIfNeeded();
+    	String value = prop.getProperty(key);
 
-		if (prop == null) {
-			prop = new Properties();
+        if (value == null) {
+            throw new RuntimeException("Missing required property: " + key +
+                    " in " + TEST_DATA);
+        }
 
-			try {
-				InputStream is = LoadProp.class.getClassLoader().getResourceAsStream(testData);
-				if (is == null) {
-					throw new RuntimeException("Could not find " + testData + " on the classpath");
-				}
-				prop.load(is);
-			} catch (IOException e) {
-				throw new RuntimeException("Failed to load properties file: " + testData, e);
-			}
-		}
-		return prop.getProperty(key);
+        return value.trim();
 	}
 }

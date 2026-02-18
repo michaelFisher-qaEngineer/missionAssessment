@@ -9,7 +9,7 @@ import framework.config.LoadProp;
 public class BaseApiClient {
     protected RequestSpecification request;
     private static final String BASE_URI = "https://reqres.in";
-    private static final String API_KEY_PROPERTY = "REQRES_API_KEY";
+    private static final String API_KEY_PROPERTY = "reqresApiKey";
 
 
     public BaseApiClient() {

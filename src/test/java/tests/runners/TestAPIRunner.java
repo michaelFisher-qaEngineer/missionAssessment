@@ -6,15 +6,16 @@ import io.cucumber.testng.CucumberOptions;
 @CucumberOptions(
         features = "src/test/resources/features",
         glue = {"tests"},
-        tags = "@UI",
+        tags = "@API",
         plugin = {
                 "pretty",
-                "html:target/cucumber-reports/ui/cucumber-pretty.html",
-                "json:target/cucumber-reports/ui/cucumber.json",
-                "rerun:target/cucumber-reports/ui/rerun.txt"
+                "html:target/cucumber-reports/api/cucumber-pretty.html",
+                "json:target/cucumber-reports/api/cucumber.json",
+                "rerun:target/cucumber-reports/api/rerun.txt"
         },
         monochrome = true
 )
-public class TestRunnerUI extends AbstractTestNGCucumberTests {
+
+public class TestAPIRunner extends AbstractTestNGCucumberTests {
 	
 }

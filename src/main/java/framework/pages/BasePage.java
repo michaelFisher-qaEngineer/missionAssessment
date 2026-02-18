@@ -12,7 +12,7 @@ public class BasePage {
     	this.driver = DriverManager.getDriver();
     	if (this.driver == null) {
             throw new IllegalStateException(
-                "ThreadLocal WebDriver is null. Did you initialize DriverManager.setDriver(...) in your Hooks @Before?"
+                "ThreadLocal WebDriver is null. Did you initialize DriverManager.initDriver() in your Hooks @Before?"
             );
         }
         PageFactory.initElements(this.driver, this);
