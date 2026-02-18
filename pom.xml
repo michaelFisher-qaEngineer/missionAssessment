@@ -1,124 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.mission</groupId>
-  <artifactId>MissionQA</artifactId>
-  <version>1.0-SNAPSHOT</version>
+	<groupId>org.mission</groupId>
+	<artifactId>MissionQA</artifactId>
+	<version>1.0-SNAPSHOT</version>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <!-- Java 21 -->
-    <maven.compiler.release>21</maven.compiler.release>
+		<!-- Java 21 -->
+		<maven.compiler.release>21</maven.compiler.release>
 
-    <!-- Versions -->
-    <cucumber.version>7.34.2</cucumber.version>
-    <selenium.version>4.40.0</selenium.version>
-    <junit4.version>4.13.2</junit4.version>
-    <testng.version>7.12.0</testng.version>
-    <restassured.version>6.0.0</restassured.version>
-    <webdrivermanager.version>6.3.3</webdrivermanager.version>
-    <commonsio.version>2.21.0</commonsio.version>
-    <log4j2.version>2.23.1</log4j2.version>
+		<!-- Versions -->
+		<cucumber.version>7.34.2</cucumber.version>
+		<selenium.version>4.40.0</selenium.version>
+		<testng.version>7.12.0</testng.version>
+		<restassured.version>6.0.0</restassured.version>
+		<webdrivermanager.version>6.3.3</webdrivermanager.version>
+		<commonsio.version>2.21.0</commonsio.version>
+		<log4j2.version>2.23.1</log4j2.version>
+		<surefire.version>3.4.0</surefire.version>
+	</properties>
 
-    <!-- Helps Surefire discover tests consistently -->
-    <surefire.version>3.4.0</surefire.version>
-  </properties>
+	<dependencies>
 
-  <dependencies>
+		<!-- ========== Cucumber ========== -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
 
-    <!-- ========== Cucumber (single modern line) ========== -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-java</artifactId>
-      <version>${cucumber.version}</version>
-      <scope>test</scope>
-    </dependency>
+		<!-- ==========TestNG runner ========== -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-testng</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
 
-    <!-- JUnit runner (kept) -->
-<!--    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-junit</artifactId>
-      <version>${cucumber.version}</version>
-      <scope>test</scope>
-    </dependency>-->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${testng.version}</version>
+			<scope>test</scope>
+		</dependency>
 
-    <!-- TestNG runner (kept) -->
-    <dependency>
-      <groupId>io.cucumber</groupId>
-      <artifactId>cucumber-testng</artifactId>
-      <version>${cucumber.version}</version>
-      <scope>test</scope>
-    </dependency>
+		<!-- ========== Selenium ========== -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+		</dependency>
 
-    <!-- Keep BOTH frameworks available -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit4.version}</version>
-      <scope>test</scope>
-    </dependency>
+		<!-- ==========Driver binaries manager ========== -->
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>${webdrivermanager.version}</version>
+		</dependency>
 
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>${testng.version}</version>
-      <scope>test</scope>
-    </dependency>
+		<!-- ========== REST Assured ========== -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${restassured.version}</version>
+		</dependency>
 
-    <!-- ========== Selenium (single dependency is enough) ========== -->
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-java</artifactId>
-      <version>${selenium.version}</version>
-<!--      <scope>test</scope>-->
-    </dependency>
+		<!-- ========== Utilities ========== -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commonsio.version}</version>
+		</dependency>
 
-    <!-- Driver binaries manager -->
-    <dependency>
-      <groupId>io.github.bonigarcia</groupId>
-      <artifactId>webdrivermanager</artifactId>
-      <version>${webdrivermanager.version}</version>
-    </dependency>
-
-    <!-- ========== REST Assured ========== -->
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>rest-assured</artifactId>
-      <version>${restassured.version}</version>
-    </dependency>
-
-    <!-- Only keep json-path/xml-path if you import them directly -->
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>json-path</artifactId>
-      <version>${restassured.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.rest-assured</groupId>
-      <artifactId>xml-path</artifactId>
-      <version>${restassured.version}</version>
-    </dependency>
-
-    <!-- Utilities -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commonsio.version}</version>
-    </dependency>
-
-    <!-- If you still need org.json -->
-    <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20190722</version>
-    </dependency>
-    
-    		<!-- Log4j2 -->
+		<!-- ========== Log4j2 ========== -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -130,43 +90,43 @@
 			<version>${log4j2.version}</version>
 		</dependency>
 
+	</dependencies>
 
-  </dependencies>
+	<build>
+		<plugins>
 
-  <build>
-    <plugins>
+			<!-- Compiler uses maven.compiler.release -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.13.0</version>
+				<configuration>
+					<release>${maven.compiler.release}</release>
+				</configuration>
+			</plugin>
 
-      <!-- Compiler uses maven.compiler.release -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.13.0</version>
-        <configuration>
-          <release>${maven.compiler.release}</release>
-        </configuration>
-      </plugin>
+			<!-- Runs both JUnit and TestNG tests (discovery based on naming /
+			suites) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${surefire.version}</version>
+				<configuration>
+					<includes>
+						<include>**/MavenTestRunner.java</include>
+					</includes>
 
-      <!-- Runs both JUnit and TestNG tests (discovery based on naming / suites) -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire.version}</version>
-        <configuration>
-          <!-- Common conventions; adjust if your tests use different names -->
-          <includes>
-            <include>**/MavenTestRunner.java</include>
-          </includes>
+					<!-- If you use a TestNG suite xml, uncomment and point to
+					it -->
 
-          <!-- If you use a TestNG suite xml, uncomment and point to it -->
-          <!--
-          <suiteXmlFiles>
-            <suiteXmlFile>testng.xml</suiteXmlFile>
-          </suiteXmlFiles>
-          -->
-        </configuration>
-      </plugin>
+<!--					<suiteXmlFiles>
+						<suiteXmlFile>testng.xml</suiteXmlFile>
+					</suiteXmlFiles>-->
 
-    </plugins>
-  </build>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 
 </project>

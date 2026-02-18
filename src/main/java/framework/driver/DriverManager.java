@@ -52,11 +52,11 @@ public class DriverManager {
 			webDriver = createChromeDriver();
 			break;
 		}
-	    // Decorate driver to auto-log clicks/typing/navigation
-	    WebDriverListener listener = new SeleniumLogger();
-	    WebDriver decoratedDriver = new EventFiringDecorator(listener).decorate(webDriver);
+		// Decorate driver to auto-log clicks/typing/navigation
+		WebDriverListener listener = new SeleniumLogger();
+		WebDriver decoratedDriver = new EventFiringDecorator<WebDriver>(listener).decorate(webDriver);
 
-	    driver.set(decoratedDriver);
+		driver.set(decoratedDriver);
 		log.info("WebDriver initialized. browser={}", browser);
 	}
 

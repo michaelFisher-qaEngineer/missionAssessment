@@ -14,22 +14,26 @@ public class CheckoutOverviewPage extends BasePage {
 		super();
 	}
 
-	private final By cartItems = By.cssSelector(".cart_item");
-	private final By itemPrice = By.cssSelector("[data-test='inventory-item-price']");
-	
-	@FindBy(css = ".summary_subtotal_label")
-	private WebElement itemTotal;
+    @FindBy(css = ".cart_item")
+    private List<WebElement> cartItems;
+
+    @FindBy(css = ".summary_subtotal_label")
+    private WebElement itemTotal;
 	
 	@FindBy(css = ".summary_tax_label")
 	private WebElement taxAmount;
+	
+	private static final By ITEM_PRICE =
+	        By.cssSelector("[data-test='inventory-item-price']");
+
 
 	public List<BigDecimal> getAllItemPrices() {
     	List<BigDecimal> prices = new ArrayList<BigDecimal>();
-		List<WebElement> rows = driver.findElements(cartItems);
 
-		for(int i = 0; i < rows.size(); i++) {
-			WebElement row = rows.get(i);
-			String priceText = row.findElement(itemPrice).getText();
+		for(int i = 0; i < cartItems.size(); i++) {
+			WebElement row = cartItems.get(i);
+			WebElement priceElement = row.findElement(ITEM_PRICE);
+			String priceText = priceElement.getText();
 			prices.add(parseMoney(priceText));
 		}
 		return prices;

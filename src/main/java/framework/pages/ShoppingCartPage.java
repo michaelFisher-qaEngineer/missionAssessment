@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -16,32 +17,35 @@ public class ShoppingCartPage extends BasePage {
 	@FindBy(css = "#checkout")
 	private WebElement checkoutButton;
 	
-	private By inventoryItems = By.cssSelector("[data-test='inventory-item']");
-	private By itemName = By.cssSelector("[data-test='inventory-item-name']");
-	private By itemQuantity = By.cssSelector("[data-test='item-quantity']");
-
+	@FindBy(css = "[data-test='inventory-item']")
+    private List<WebElement> inventoryItems;
+	
+	private static final By ITEM_NAME = By.cssSelector("[data-test='inventory-item-name']");
+	private static final By ITEM_QUANTITY = By.cssSelector("[data-test='item-quantity']");
+	private static final By REMOVE_BUTTON = By.cssSelector("button[data-test^='remove']");
+	
 	public int getQuantityForProduct(String productName) {
-	    List<WebElement> items = driver.findElements(inventoryItems);
+		String target = productName == null ? "" : productName.trim();
 
-	    for (WebElement item : items) {
-	        String name = item.findElement(itemName).getText();
+	    for (WebElement item : inventoryItems) {
+	        String name = item.findElement(ITEM_NAME).getText();
 
-	        if (name.equalsIgnoreCase(productName)) {
+	        if (name.equalsIgnoreCase(target)) {
 	            return Integer.parseInt(
-	                item.findElement(itemQuantity).getText()
+	                item.findElement(ITEM_QUANTITY).getText()
 	            );
 	        }
 	    }
-	    throw new RuntimeException("Product not found: " + productName);
+	    throw new NoSuchElementException("Product not found: " + productName);
 	}
 
 	public List<Integer> getAllProductQuantities() {
-	    List<WebElement> items = driver.findElements(inventoryItems);
+
 	    List<Integer> quantities = new ArrayList<>();
 
-	    for (WebElement item : items) {
+	    for (WebElement item : inventoryItems) {
 	        int quantity = Integer.parseInt(
-	            item.findElement(itemQuantity).getText()
+	            item.findElement(ITEM_QUANTITY).getText()
 	        );
 	        quantities.add(quantity);
 	    }
@@ -49,26 +53,25 @@ public class ShoppingCartPage extends BasePage {
 	}
 	
 	public void removeItemFromCart(String productName) {
-	    List<WebElement> items = driver.findElements(inventoryItems);
+		String target = productName == null ? "" : productName.trim();
 
-	    for (WebElement item : items) {
-	        String name = item.findElement(itemName).getText();
+	    for (WebElement item : inventoryItems) {
+	        String name = item.findElement(ITEM_NAME).getText();
 
-	        if (name.equalsIgnoreCase(productName)) {
-	            item.findElement(By.cssSelector("button[data-test^='remove']")).click();
+	        if (name.equalsIgnoreCase(target)) {
+	            item.findElement(REMOVE_BUTTON).click();
 	            return;
 	        }
 	    }
-	    throw new RuntimeException("Product not found: " + productName);
+	    throw new NoSuchElementException("Product not found: " + productName);
 	}
 	
 	public int getTotalItemsInCart() {
-	    List<WebElement> items = driver.findElements(inventoryItems);
 	    int total = 0;
 
-	    for (WebElement item : items) {
+	    for (WebElement item : inventoryItems) {
 	        int quantity = Integer.parseInt(
-	            item.findElement(itemQuantity).getText()
+	            item.findElement(ITEM_QUANTITY).getText()
 	        );
 	        total += quantity;
 	    }

@@ -8,8 +8,9 @@ import org.openqa.selenium.support.PageFactory;
 import framework.driver.DriverManager;
 
 public class BasePage {
-	protected WebDriver driver;
 	protected final Logger log = LogManager.getLogger(getClass());
+	protected WebDriver driver;
+	
     public BasePage() {
     	this.driver = DriverManager.getDriver();
     	if (this.driver == null) {

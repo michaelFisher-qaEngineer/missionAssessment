@@ -86,20 +86,20 @@ public class Verifications {
 
 	}
 
-	public static String verifyEqualsString(String actual, String expected, String contextLabel) {
+	public static void verifyEqualsString(String actual, String expected, String contextLabel) {
 		if (actual == null || expected == null) {
 			if (actual != expected) {
                 log.error("{} expected '{}' but found '{}'", contextLabel, expected, actual);
 				throw new AssertionError(contextLabel + " expected '" + expected + "' but found '" + actual + "'");
 			}
-			return actual;
+			return;
 		}
 
 		if (!actual.equals(expected)) {
             log.error("{} expected '{}' but found '{}'", contextLabel, expected, actual);
 			throw new AssertionError(contextLabel + " expected '" + expected + "' but found '" + actual + "'");
 		}
-		return actual;
+		return;
 	}
 
 	public static void verifyNotNull(int id, String message) {

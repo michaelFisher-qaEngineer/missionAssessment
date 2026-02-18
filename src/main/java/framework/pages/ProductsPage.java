@@ -18,16 +18,20 @@ public class ProductsPage extends BasePage {
 	
 	@FindBy(css=".shopping_cart_link")
 	private WebElement shoppingCartLink;
+	
+	@FindBy(className = "shopping_cart_badge")
+	private List<WebElement> cartBadges;
 
-	private final By productName = By.className("inventory_item_name");
-	private final By addToCartButton = By.cssSelector("button[data-test^='add-to-cart']");
+	private static final By PRODUCT_NAME = By.className("inventory_item_name");
+	private static final By ADD_TO_CART_BUTTON = By.cssSelector("button[data-test^='add-to-cart']");
 
 	public void addItemToCart(String itemName) {
+		String target = itemName == null ? "" : itemName.trim();
 
 		for (WebElement product : productContainers) {
-			String name = product.findElement(productName).getText().trim();
-			if (name.equalsIgnoreCase(itemName.trim())) {
-				product.findElement(addToCartButton).click();
+			String name = product.findElement(PRODUCT_NAME).getText().trim();
+			if (name.equalsIgnoreCase(target)) {
+				product.findElement(ADD_TO_CART_BUTTON).click();
 				return;
 			}
 		}
@@ -39,12 +43,11 @@ public class ProductsPage extends BasePage {
 	}
 	
 	public int getShoppingCartItemCount() {
-		List<WebElement> cartBadge = shoppingCartLink.findElements(By.className("shopping_cart_badge"));
-		if (cartBadge.size() == 0) {
-			return 0;
-		}
-		String itemCountText = cartBadge.get(0).getText().trim();
-		return Integer.parseInt(itemCountText);
+		if (cartBadges.isEmpty()) {
+	        return 0;
+	    }
+	    String itemCountText = cartBadges.get(0).getText().trim();
+	    return Integer.parseInt(itemCountText);
 	}
 
 }
