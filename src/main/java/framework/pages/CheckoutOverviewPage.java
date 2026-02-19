@@ -1,0 +1,63 @@
+package framework.pages;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+
+public class CheckoutOverviewPage extends BasePage {
+
+	public CheckoutOverviewPage() {
+		super();
+	}
+
+    @FindBy(css = ".cart_item")
+    private List<WebElement> cartItems;
+
+    @FindBy(css = ".summary_subtotal_label")
+    private WebElement itemTotal;
+	
+	@FindBy(css = ".summary_tax_label")
+	private WebElement taxAmount;
+	
+	private static final By ITEM_PRICE =
+	        By.cssSelector("[data-test='inventory-item-price']");
+
+
+	public List<BigDecimal> getAllItemPrices() {
+    	List<BigDecimal> prices = new ArrayList<BigDecimal>();
+
+		for(int i = 0; i < cartItems.size(); i++) {
+			WebElement row = cartItems.get(i);
+			WebElement priceElement = row.findElement(ITEM_PRICE);
+			String priceText = priceElement.getText();
+			prices.add(parseMoney(priceText));
+		}
+		return prices;
+    }
+	
+	public BigDecimal getItemTotal() {
+		String totalText = itemTotal.getText();
+		String cleaned = totalText.replace("Item total: ", "").trim();
+		return parseMoney(cleaned);
+	}
+	
+	public BigDecimal getTaxAmount() {
+		String taxText = taxAmount.getText();
+		String cleaned = taxText.replace("Tax: ", "").trim();
+		return parseMoney(cleaned);
+	}
+
+	private BigDecimal parseMoney(String text) {
+		if (text == null) {
+			throw new IllegalArgumentException("Price text was null");
+		}
+
+		// "$29.99" -> "29.99"
+		String cleaned = text.trim().replace("$", "");
+		return new BigDecimal(cleaned);
+	}
+}

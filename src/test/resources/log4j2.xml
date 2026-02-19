@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+
+        <!-- Console output -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="%d{HH:mm:ss} %-5level [%t] %c{1} - %msg%n"/>
+        </Console>
+
+        <!-- File output -->
+        <File name="File"
+              fileName="target/logs/test.log"
+              append="true">
+            <PatternLayout
+                pattern="%d{yyyy-MM-dd HH:mm:ss} %-5level [%t] %c - %msg%n"/>
+        </File>
+
+    </Appenders>
+
+    <Loggers>
+
+        <!-- Your framework logs, change level to 'debug' to see everything-->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>
