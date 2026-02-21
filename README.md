@@ -35,7 +35,7 @@ The project reflects real-world QA engineering practices rather than simple test
 Clone the project and run all tests:
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/michaelFisher-qaEngineer/missionAssessment.git
 cd MissionQA
 mvn clean test
 ```
@@ -109,7 +109,6 @@ src
 │       ├── driver/            # Thread-safe WebDriver management
 │       ├── listeners/         # # Test lifecycle listeners (logging, reporting, screenshots, execution hooks)
 │       ├── pages/             # Page Object Model classes (UI)
-│       ├── driver/            # Thread-safe WebDriver management
 │       └── verifications/     # Reusable assertion helpers
 │
 ├── test
@@ -214,7 +213,7 @@ mvn -version
 ### Clone Project
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/michaelFisher-qaEngineer/missionAssessment.git
 cd MissionQA
 ```
 
