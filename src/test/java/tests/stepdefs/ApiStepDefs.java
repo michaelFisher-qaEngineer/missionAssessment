@@ -16,24 +16,31 @@ import framework.api.reqres.models.UsersListResponse;
 import java.util.Set;
 
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class ApiStepDefs {
-	private final ReqResUsersApi usersApi = new ReqResUsersApi();
+	private ReqResUsersApi usersApi;
 
 	private UsersListResponse firstPageResponse;
 	private UsersListResponse numberPageResponse;
 	private int totalUsers;
 	private List<Integer> allUserIds;
 
-	private static UserGetResponse userResponse;
-	private static UserPostResponse userPostResponse;
-	private static LoginResponse loginResponse;
+	private UserGetResponse userResponse;
+	private UserPostResponse userPostResponse;
+	private LoginResponse loginResponse;
 
 	private final Set<Integer> uniqueUserIds = new HashSet<Integer>();
+	
+	@Before("@API")
+	public void apiSetup() {
+	    usersApi = new ReqResUsersApi();
+	    uniqueUserIds.clear();
+	}
 
 	@Given("^I get the default list of users for on 1st page$")
 	public void iGetTheDefaultListofusers() {
@@ -66,7 +73,6 @@ public class ApiStepDefs {
 	public void iShouldMatchTotalCount() {
 		int totalUserIdCount = usersApi.getTotalIdCountForAllPages();
 		verifyEqualsInt(totalUserIdCount, totalUsers, "Total user ID count should match total users");
-
 	}
 
 	@Given("I make a search for userId {int}")
