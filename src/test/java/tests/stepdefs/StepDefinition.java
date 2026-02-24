@@ -12,29 +12,17 @@ import framework.pages.HomePage;
 import framework.pages.ProductsPage;
 import framework.pages.ShoppingCartPage;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 public class StepDefinition {
-    private HomePage homePage;
-    private ProductsPage productsPage;
-    private ShoppingCartPage shoppingCartPage;
-    private CheckoutPage checkoutPage;
-    private CheckoutOverviewPage checkoutOverviewPage;
-
-    @Before("@UI")
-    public void initPages() {
-        // Assumes your Hook already created/initialized the driver for @UI scenarios
-        // and your BasePage / DriverManager pattern is used inside Page constructors.
-        homePage = new HomePage();
-        productsPage = new ProductsPage();
-        shoppingCartPage = new ShoppingCartPage();
-        checkoutPage = new CheckoutPage();
-        checkoutOverviewPage = new CheckoutOverviewPage();
-    }
+    private HomePage homePage = new HomePage();
+    private ProductsPage productsPage = new ProductsPage();
+    private ShoppingCartPage shoppingCartPage = new ShoppingCartPage();
+    private CheckoutPage checkoutPage = new CheckoutPage();
+    private CheckoutOverviewPage checkoutOverviewPage = new CheckoutOverviewPage();
 
     @Given("I am on the home page")
     public void iAmOnTheHomePage() {
