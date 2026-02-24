@@ -18,9 +18,9 @@ public class RetryAnalyzer implements IRetryAnalyzer {
     @Override
     public boolean retry(ITestResult result) {
 
-        // Only retry scenarios tagged @flakey
-        if (!hasTag(result, "@flakey")) {
-            return false;
+        // Only retry @UI scenarios tagged @flakey
+    	if (!hasTag(result, "@UI") || !hasTag(result, "@flakey")) {
+    		return false;
         }
 
         if (retryCount < maxRetryCount) {
