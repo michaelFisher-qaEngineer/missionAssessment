@@ -23,14 +23,5 @@ import io.cucumber.testng.PickleWrapper;
 )
 
 public class TestAPIRunner extends AbstractTestNGCucumberTests {
-    @Override
-    @DataProvider(parallel = false)
-    public Object[][] scenarios() {
-        return super.scenarios();
-    }
 
-    @Test(dataProvider = "scenarios", retryAnalyzer = RetryAnalyzer.class)
-    public void runScenario(PickleWrapper pickleWrapper, FeatureWrapper featureWrapper) {
-        super.runScenario(pickleWrapper, featureWrapper);
-    }
 }
