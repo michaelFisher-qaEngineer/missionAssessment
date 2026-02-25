@@ -268,18 +268,24 @@ These are not executed by Maven.
 
 ### API Key Setup
 
-The framework expects an API key for ReqRes:
+This framework requires a ReqRes API key for API tests.
 
-```
-src/test/resources/testdata/TestData.properties
-```
+For security reasons, the actual `TestData.properties` file is **not committed** to the repository.
 
-Example:
+#### Setup Instructions
 
-```
-REQRES_API_KEY=your_api_key_here
-```
+1. Navigate to: src/test/resources/testdata/
+2. Copy the template file: TestData.properties.template
+3. Rename the copy to: TestData.properties
+4. Add your ReqRes API key: 
+reqresApiKey=your_api_key_here
 
+> ⚠️ The real `TestData.properties` file is gitignored to prevent committing secrets.
+
+---
+
+
+	
 ---
 
 ## Example Test Scenarios

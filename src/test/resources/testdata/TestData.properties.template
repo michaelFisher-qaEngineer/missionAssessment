@@ -1,0 +1,36 @@
+# ==============================
+# Automation Framework Config
+# ==============================
+
+# ------------------------------
+# Browser Configuration
+# ------------------------------
+# Set ONE active browser below
+browser=chromeMac
+#browser=edge
+#browser=firefox
+
+
+# ------------------------------
+# Application Under Test
+# ------------------------------
+url=https://www.saucedemo.com/
+
+
+# ------------------------------
+# Reporting / Screenshots
+# ------------------------------
+screenshotLocation=./Screenshots/
+
+
+# ------------------------------
+# API Configuration
+# ------------------------------
+# IMPORTANT:
+# Do NOT commit real API keys.
+# Either:
+#   1) Set environment variable REQRES_API_KEY
+#   2) Copy this template to TestData.properties (gitignored)
+#      and insert your key locally.
+
+reqresApiKey=
