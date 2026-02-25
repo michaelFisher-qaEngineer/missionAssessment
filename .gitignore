@@ -3,3 +3,4 @@ test-output/
 *.log
 cucumber-reports/
 reports/
+TestData.properties
