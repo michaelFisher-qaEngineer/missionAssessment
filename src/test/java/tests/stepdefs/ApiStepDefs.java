@@ -35,11 +35,11 @@ public class ApiStepDefs {
 	private LoginResponse loginResponse;
 
 	private final Set<Integer> uniqueUserIds = new HashSet<Integer>();
-	
+
 	@Before("@API")
 	public void apiSetup() {
-	    usersApi = new ReqResUsersApi();
-	    uniqueUserIds.clear();
+		usersApi = new ReqResUsersApi();
+		uniqueUserIds.clear();
 	}
 
 	@Given("^I get the default list of users for on 1st page$")
@@ -100,8 +100,7 @@ public class ApiStepDefs {
 
 			switch (field.toLowerCase()) {
 			case "id":
-				verifyEqualsInt(userResponse.getId(), Integer.parseInt(expectedValue),
-						"User ID should match");
+				verifyEqualsInt(userResponse.getId(), Integer.parseInt(expectedValue), "User ID should match");
 				break;
 
 			case "email":
@@ -109,8 +108,7 @@ public class ApiStepDefs {
 				break;
 
 			case "first_name":
-				verifyEqualsString(userResponse.getFirstName(), expectedValue,
-						"User first name should match");
+				verifyEqualsString(userResponse.getFirstName(), expectedValue, "User first name should match");
 				break;
 
 			default:
@@ -133,7 +131,7 @@ public class ApiStepDefs {
 
 	@Then("response should contain the following data")
 	public void responseShouldContainTheFollowingData(DataTable dt) {
-		List<Map<String,String>> rows = dt.asMaps(String.class, String.class);
+		List<Map<String, String>> rows = dt.asMaps(String.class, String.class);
 
 		if (rows.isEmpty()) {
 			throw new IllegalArgumentException("DataTable is empty");
@@ -142,9 +140,9 @@ public class ApiStepDefs {
 		for (Map<String, String> row : rows) {
 
 			String field = row.get("field");
-	        if (field == null || field.trim().isEmpty()) {
-	            throw new IllegalArgumentException("Missing 'field' value in DataTable row: " + row);
-	        }
+			if (field == null || field.trim().isEmpty()) {
+				throw new IllegalArgumentException("Missing 'field' value in DataTable row: " + row);
+			}
 			switch (field.toLowerCase()) {
 			case "name":
 				verifyNotNullOrEmpty(userPostResponse.getName(), "name should be present in response.");
@@ -165,22 +163,49 @@ public class ApiStepDefs {
 			}
 		}
 	}
-	
+
 	@Given("I login unsuccessfully with the following data")
 	public void iLoginUnsuccesfullyWithFollowingData(DataTable dt) {
 		iLoginSuccessfullyWithFollowingData(dt);
 	}
-	
+
 	@Given("I login successfully with the following data")
 	public void iLoginSuccessfullyWithFollowingData(DataTable dt) {
 		List<Map<String, String>> rows = dt.asMaps(String.class, String.class);
-		if (rows.isEmpty()) {
-			throw new IllegalArgumentException("DataTable is empty");
+		if (rows == null || rows.isEmpty()) {
+			throw new IllegalArgumentException("Login DataTable is empty. Expected Email and Password.");
 		}
+
 		Map<String, String> loginData = rows.get(0);
+
 		String email = loginData.get("Email");
-		String password = loginData.get("Password");
-		loginResponse = usersApi.userLogin(email, password);
+		if (email == null || email.trim().isEmpty()) {
+			throw new IllegalArgumentException("Login DataTable missing required column value: Email");
+		}
+
+		// Password column MUST exist, but value may be empty
+		if (!loginData.containsKey("Password")) {
+			throw new IllegalArgumentException("Login DataTable missing required column: Password");
+		}
+
+		String passwordCell = loginData.get("Password");
+		String resolvedPassword;
+
+		// Case 1: empty password explicitly provided
+		if (passwordCell == null || passwordCell.trim().isEmpty()) {
+			resolvedPassword = "";
+		}
+		// Case 2: lookup key provided
+		else {
+			resolvedPassword = framework.config.LoadProp.getProperty(passwordCell);
+
+			if (resolvedPassword == null) {
+				throw new IllegalArgumentException("No password found for key '" + passwordCell + "' in properties. "
+						+ "Either add it to the credentials file or leave the Password cell empty.");
+			}
+		}
+
+		loginResponse = usersApi.userLogin(email, resolvedPassword);
 	}
 
 	@Then("I should get a response code of {int}")
@@ -188,31 +213,31 @@ public class ApiStepDefs {
 		verifyEqualsInt(loginResponse.getStatusCode(), responseCode,
 				"Login response status code should match expected.");
 	}
-	
+
 	@And("I should see the following response message:")
 	public void iShouldSeeTheFollowingResponseMessage(DataTable dt) {
-	    List<Map<String, String>> rows = dt.asMaps(String.class, String.class);
-	    if (rows.isEmpty()) {
-	        throw new IllegalArgumentException("DataTable is empty");
-	    }
-	    
-	    Map<String, String> expectedMessages = rows.get(0);
-	    String field = expectedMessages.get("field");
-	    String expectedValue = expectedMessages.get("value");
-	    
-	    if ("error".equalsIgnoreCase(field)) {
-	        verifyEqualsString(loginResponse.getErrorMessage(), expectedValue,
-	                "Error message should match expected value");
-	    } else {
-	        throw new IllegalArgumentException("Unsupported field: " + field);
-	    }
+		List<Map<String, String>> rows = dt.asMaps(String.class, String.class);
+		if (rows.isEmpty()) {
+			throw new IllegalArgumentException("DataTable is empty");
+		}
+
+		Map<String, String> expectedMessages = rows.get(0);
+		String field = expectedMessages.get("field");
+		String expectedValue = expectedMessages.get("value");
+
+		if ("error".equalsIgnoreCase(field)) {
+			verifyEqualsString(loginResponse.getErrorMessage(), expectedValue,
+					"Error message should match expected value");
+		} else {
+			throw new IllegalArgumentException("Unsupported field: " + field);
+		}
 	}
-	
+
 	@Given("I wait for the user list to load")
 	public void iWaitForUserListToLoad() {
 		allUserIds = usersApi.getAllUserIds();
 	}
-	
+
 	@Then("I should see that every user has a unique id")
 	public void iShouldSeeThatEveryUserHasAUniqueID() {
 		verifyAllUnique(allUserIds, "User IDs should be unique");
