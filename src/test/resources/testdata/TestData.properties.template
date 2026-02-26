@@ -15,6 +15,7 @@ browser=chromeMac
 # Application Under Test
 # ------------------------------
 url=https://www.saucedemo.com/
+validUiPassword=
 
 
 # ------------------------------
