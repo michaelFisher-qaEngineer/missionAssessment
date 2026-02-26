@@ -17,19 +17,21 @@ The framework demonstrates:
 This project is designed to showcase real-world automation practices, maintainability, and clean framework design.
 
 ---
+
 ## Purpose
 
 This framework was built to demonstrate production-grade test automation design using industry-standard patterns and tooling. The focus is on:
 
-- Maintainable test architecture
-- Scalable UI and API automation
-- Clean separation of concerns
-- Reliable test execution in CI environments
-- Reusable and extensible test components
+* Maintainable test architecture
+* Scalable UI and API automation
+* Clean separation of concerns
+* Reliable test execution in CI environments
+* Reusable and extensible test components
 
 The project reflects real-world QA engineering practices rather than simple test scripting.
 
 ---
+
 ## Quick Start
 
 Clone the project and run all tests:
@@ -39,10 +41,10 @@ git clone https://github.com/michaelFisher-qaEngineer/missionAssessment.git
 cd MissionQA
 mvn clean test
 ```
-This executes all UI and API scenarios using the MavenTestRunner
+
+This executes all UI and API scenarios using the MavenTestRunner.
 
 ---
-
 
 ## Tech Stack
 
@@ -64,7 +66,7 @@ This executes all UI and API scenarios using the MavenTestRunner
 
 Tests the e-commerce workflow on:
 
-https://www.saucedemo.com/
+[https://www.saucedemo.com/](https://www.saucedemo.com/)
 
 Coverage includes:
 
@@ -82,7 +84,7 @@ Coverage includes:
 
 Tests public REST APIs from:
 
-https://reqres.in/
+[https://reqres.in/](https://reqres.in/)
 
 Coverage includes:
 
@@ -107,7 +109,7 @@ src
 │       ├── api/               # API client classes (ReqRes endpoints)
 │       ├── config/            # Configuration and property utilities
 │       ├── driver/            # Thread-safe WebDriver management
-│       ├── listeners/         # # Test lifecycle listeners (logging, reporting, screenshots, execution hooks)
+│       ├── listeners/         # Test lifecycle listeners (logging, reporting, screenshots, execution hooks)
 │       ├── pages/             # Page Object Model classes (UI)
 │       └── verifications/     # Reusable assertion helpers
 │
@@ -128,15 +130,48 @@ src
 │       └── log4j2.xml         # Logging configuration
 ```
 
-### Architecture Highlights
+---
 
-- **Page Object Model (POM)** — Separates UI interaction from test logic.
-- **API Client Layer** — Encapsulates REST endpoint behavior and request configuration.
-- **Driver Manager** — Provides thread-safe WebDriver lifecycle management.
-- **Reusable Verifications** — Centralized assertion utilities to reduce duplication.
-- **Cucumber BDD Structure** — Business-readable feature files mapped to step definitions.
-- **Single Maven Runner Strategy** — `MavenTestRunner` ensures tests execute once in CLI and CI environments.
+## Secure Credential Handling (Important)
 
+This framework intentionally **does not store secrets (passwords, tokens, API keys) in Gherkin feature files or source code**.
+
+### How credentials are handled
+
+* Gherkin feature files use **logical placeholders** (lookup keys) instead of real secrets
+* Step definitions resolve those keys at runtime from property files or environment variables
+* Real credentials are **never committed to source control**
+
+### Example: Gherkin (no secrets)
+
+```gherkin
+Given I login successfully with the following data
+  | Email              | Password          |
+  | eve.holt@reqres.in | validApiPassword  |
+```
+
+Here, `validApiPassword` is a **lookup key**, not the real password.
+
+### Properties file (gitignored)
+
+```properties
+validApiPassword=cityslicka
+```
+
+A template file is provided instead:
+
+```properties
+# TestData.properties.template
+validApiPassword=
+```
+
+### Supported scenarios
+
+* Lookup-based passwords (recommended)
+* Explicit empty passwords for negative testing
+* Clear validation errors if a lookup key is missing
+
+This approach mirrors **enterprise CI/CD practices**, keeps feature files business-readable, and prevents accidental credential leaks.
 
 ---
 
@@ -152,7 +187,6 @@ src
 This layered execution model ensures reliable, maintainable, and scalable test automation.
 
 ---
-
 
 ## Design Principles Used
 
@@ -183,84 +217,12 @@ This layered execution model ensures reliable, maintainable, and scalable test a
 * Step definition mapping
 
 ### Test Execution Strategy
-* A dedicated MavenTestRunner ensures a single source of test execution in CI/CD and command-line runs.
-* Maven Surefire is configured to execute only this runner.
-* Tag filtering (@UI, @API) controls which scenarios execute.
-* The single runner strategy mirrors production CI pipelines by ensuring deterministic test execution and preventing duplicate runs.
+
+* A dedicated MavenTestRunner ensures a single source of test execution in CI/CD and command-line runs
+* Maven Surefire is configured to execute only this runner
+* Tag filtering (`@UI`, `@API`) controls which scenarios execute
 
 Additional runners exist only for IDE debugging and development workflows.
-This prevents duplicate execution and improves build reliability.
-
----
-
-## Setup Instructions
-
-### Prerequisites
-
-* Java 21 installed
-* Maven installed
-* Chrome browser (for UI tests)
-
-Verify:
-
-```bash
-java -version
-mvn -version
-```
-
----
-
-### Clone Project
-
-```bash
-git clone https://github.com/michaelFisher-qaEngineer/missionAssessment.git
-cd MissionQA
-```
-
----
-
-### Install Dependencies
-
-```bash
-mvn clean install
-```
-
----
-
-## Running Tests
-
-### Run All Tests
-
-```bash
-mvn test
-```
-
----
-
-### Run UI Tests Only
-
-```bash
-mvn test -Dcucumber.filter.tags="@UI"
-```
-
----
-
-### Run API Tests Only
-
-```bash
-mvn test -Dcucumber.filter.tags="@API"
-```
-
----
-### Run from IDE
-
-The project also includes runner classes for IDE convenience:
-
-* TestUIRunner — UI tests
-* TestAPIRunner — API tests
-* TestAllRunner — all tests
-
-These are not executed by Maven.
 
 ---
 
@@ -274,18 +236,17 @@ For security reasons, the actual `TestData.properties` file is **not committed**
 
 #### Setup Instructions
 
-1. Navigate to: src/test/resources/testdata/
-2. Copy the template file: TestData.properties.template
-3. Rename the copy to: TestData.properties
-4. Add your ReqRes API key: 
+1. Navigate to: `src/test/resources/testdata/`
+2. Copy the template file: `TestData.properties.template`
+3. Rename the copy to: `TestData.properties`
+4. Add your ReqRes API key:
+
+```properties
 reqresApiKey=your_api_key_here
+```
 
 > ⚠️ The real `TestData.properties` file is gitignored to prevent committing secrets.
 
----
-
-
-	
 ---
 
 ## Example Test Scenarios
@@ -316,7 +277,7 @@ Then response should contain id and createdAt
 * Thread-safe driver management
 * Reusable test utilities
 * Data-driven testing support
-* Clear separation of concerns
+* Secure credential handling
 
 ---
 
