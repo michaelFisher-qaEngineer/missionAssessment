@@ -28,15 +28,39 @@ public class StepDefinition {
     public void iAmOnTheHomePage() {
         homePage.open();
     }
-
+    
     @And("I login in with the following details")
     public void i_login_in_with_the_following_details(DataTable dataTable) {
+
         List<Map<String, String>> credentials = dataTable.asMaps(String.class, String.class);
-        String userName = credentials.get(0).get("userName");
-        String password = credentials.get(0).get("Password");
+        if (credentials == null || credentials.isEmpty()) {
+            throw new RuntimeException("Login DataTable is empty. Expected a row with userName and Password.");
+        }
+
+        Map<String, String> row = credentials.get(0);
+
+        String userName = row.get("userName");
+        String passwordKey = row.get("Password"); // this is now a lookup key like "validPassword"
+
+        if (userName == null || userName.trim().isEmpty()) {
+            throw new RuntimeException("Login DataTable missing required column value: userName");
+        }
+
+        if (passwordKey == null || passwordKey.trim().isEmpty()) {
+            throw new RuntimeException("Login DataTable missing required column value: Password (expected a password key like 'validPassword')");
+        }
+
+        String resolvedPassword = framework.config.LoadProp.getProperty(passwordKey);
+
+        if (resolvedPassword == null || resolvedPassword.trim().isEmpty()) {
+            throw new RuntimeException(
+                "No password found for key '" + passwordKey + "' in properties. " +
+                "Add it to your credentials properties (and keep that file out of git)."
+            );
+        }
 
         homePage.enterUserName(userName);
-        homePage.enterPassword(password);
+        homePage.enterPassword(resolvedPassword);
         homePage.clickLogin();
     }
 

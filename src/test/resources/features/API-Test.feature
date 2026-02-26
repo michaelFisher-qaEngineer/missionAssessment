@@ -37,8 +37,8 @@ Feature: API test
 
   Scenario: LOGIN - SUCCESSFUL by a user
     Given I login successfully with the following data
-      | Email              | Password   |
-      | eve.holt@reqres.in | cityslicka |
+      | Email              | Password   	  |
+      | eve.holt@reqres.in | validApiPassword |
     Then I should get a response code of 200
 
   Scenario: LOGIN - UNSUCCESSFUL by a user

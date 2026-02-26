@@ -15,6 +15,7 @@ browser=chromeMac
 # Application Under Test
 # ------------------------------
 url=https://www.saucedemo.com/
+validUiPassword=
 
 
 # ------------------------------
@@ -34,3 +35,4 @@ screenshotLocation=./Screenshots/
 #      and insert your key locally.
 
 reqresApiKey=
+validApiPassword=
