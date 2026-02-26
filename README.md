@@ -155,7 +155,7 @@ Here, `validApiPassword` is a **lookup key**, not the real password.
 ### Properties file (gitignored)
 
 ```properties
-validApiPassword=cityslicka
+validApiPassword=passwordGoesHere
 ```
 
 A template file is provided instead:
