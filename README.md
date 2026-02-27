@@ -1,8 +1,24 @@
-# MissionQA – Test Automation Framework
+# Why This Framework Exists
+
+This framework exists to demonstrate **how test automation should be structured, maintained, and reasoned about in a real production environment**.
+
+**JavaSeleniumCucumberAutomationFramework** was built to showcase:
+
+* How I implement and extend an existing automation solution, not just write isolated tests
+* Clean separation between **test intent**, **test execution**, and **system interaction**
+* Practical decisions around **when to favor API automation over UI automation**
+* Patterns that scale as test coverage and teams grow
+
+This project is intentionally opinionated. It reflects the kinds of tradeoffs, guardrails, and structure used in enterprise test automation—not toy examples or tutorial-style demos.
+
+---
+
+# JavaSeleniumCucumberAutomationFramework – Test Automation Framework
+**An API-first, hybrid UI + API automation framework built in Java using Selenium, RestAssured, and Cucumber**
 
 ## Overview
 
-**MissionQA** is a hybrid test automation framework built in **Java** that supports both **UI testing** and **API testing** using modern industry tools and design patterns.
+**JavaSeleniumCucumberAutomationFramework** is a hybrid test automation framework built in **Java** that supports both **UI testing** and **API testing** using modern industry tools and design patterns.
 
 The framework demonstrates:
 
@@ -37,8 +53,8 @@ The project reflects real-world QA engineering practices rather than simple test
 Clone the project and run all tests:
 
 ```bash
-git clone https://github.com/michaelFisher-qaEngineer/missionAssessment.git
-cd MissionQA
+git clone https://github.com/michaelFisher-qaEngineer/JavaSeleniumCucumberAutomationFramework.git
+cd JavaSeleniumCucumberAutomationFramework
 mvn clean test
 ```
 
